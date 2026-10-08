@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Anniversary — 3 years</title>
+<style>
+:root{color-scheme:light dark;--bg:light-dark(#f7f1e9,#191613);--ink:light-dark(#2c2723,#f4eee6);--muted:light-dark(#756b61,#bdb2a6);--accent:light-dark(#9b624c,#d49a7d);--card:light-dark(#fffaf4,#26211d);--line:light-dark(#ded2c6,#453b34)}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:Georgia,'Times New Roman',serif;background:var(--bg);color:var(--ink)}
+#app{min-height:100vh;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:24px}
+.shell{width:min(760px,100%);min-height:690px;position:relative;overflow:hidden;border:1px solid var(--line);background:var(--card);box-shadow:0 24px 70px #00000018;display:flex;flex-direction:column}
+.progress{height:3px;background:var(--line);position:absolute;top:0;left:0;right:0}.progress i{display:block;height:100%;width:20%;background:var(--accent);transition:width .5s ease}
+.screen{flex:1;display:flex;flex-direction:column;justify-content:center;padding:70px clamp(28px,8vw,82px);animation:in .55s ease both}@keyframes in{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+.eyebrow{text-transform:uppercase;letter-spacing:.24em;font:600 11px Arial,sans-serif;color:var(--accent);margin-bottom:22px}.title{font-size:clamp(45px,9vw,78px);line-height:.94;margin:0 0 22px;font-weight:400}.subtitle{font-size:19px;line-height:1.6;color:var(--muted);max-width:520px}.heart{font-size:42px;margin-bottom:25px;color:var(--accent)}
+.actions{display:grid;gap:12px;margin-top:34px}.choice{appearance:none;text-align:left;border:1px solid var(--line);background:transparent;color:var(--ink);padding:20px 22px;cursor:pointer;font:16px Georgia,serif;transition:.2s;position:relative}.choice:hover{border-color:var(--accent);transform:translateX(4px);background:light-dark(#fff5ed,#302720)}.choice strong{display:block;font-weight:400;margin-bottom:6px}.choice small{display:block;color:var(--muted);font:13px Arial,sans-serif;line-height:1.4}.choice .num{position:absolute;right:18px;top:20px;color:var(--accent);font:11px Arial,sans-serif;letter-spacing:.12em}
+.back{position:absolute;bottom:25px;left:30px;border:0;background:none;color:var(--muted);cursor:pointer;font:12px Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase}.result{text-align:center}.result .title{font-size:clamp(40px,8vw,66px)}.summary{margin:26px auto 0;padding:22px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);max-width:460px;font:14px Arial,sans-serif;line-height:1.8}.restart{margin-top:30px;border:1px solid var(--ink);background:var(--ink);color:var(--card);padding:14px 24px;cursor:pointer;font:12px Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase}
+@media(max-width:520px){#app{padding:0}.shell{min-height:100vh;border:0;box-shadow:none}.screen{padding:65px 25px}.choice{padding:18px}.subtitle{font-size:17px}}
+</style>
+</head>
+<body>
+<div id="app"><main class="shell"><div class="progress"><i id="bar"></i></div><section id="content"></section></main></div>
+<script>
+const state={days:null,activity:null};
+const content=document.getElementById('content'),bar=document.getElementById('bar');
+function render(html,step){content.innerHTML=html;bar.style.width=(step/4*100)+'%';content.firstElementChild.classList.add('screen')}
+function home(){render(`<div><div class="heart">♡</div><div class="eyebrow">Anniversary</div><h1 class="title">3 years</h1><p class="subtitle">One little invitation.<br>One very important decision.</p><div class="actions"><button class="choice" onclick="days()"><strong>Open your invitation</strong><small>Let's see what we're doing...</small><span class="num">01</span></button></div></div>`,1)}
+function days(){render(`<div><div class="eyebrow">Chapter one</div><h2 class="title">How many days are you staying in Italy?</h2><p class="subtitle">Choose wisely. I may have planned more than one version of this anniversary.</p><div class="actions"><button class="choice" onclick="pickDays('3')"><strong>3 days</strong><small>Not more because I work... and you have to take vacation 😌</small><span class="num">A</span></button><button class="choice" onclick="pickDays('1.5')"><strong>1.5 days</strong><small>Only the weekend — from Friday evening to Sunday.</small><span class="num">B</span></button></div></div><button class="back" onclick="home()">← Back</button>`,2)}
+function pickDays(v){state.days=v;v==='3'?three():weekend()}
+function three(){render(`<div><div class="eyebrow">Three days</div><h2 class="title">Choose your adventure.</h2><p class="subtitle">You have the luxury of time. So... what do you want?</p><div class="actions"><button class="choice" onclick="finish('Weekend in the mountains + SPA','🏔️ 🧖‍♀️')"><strong>Weekend in the mountains + SPA</strong><small>Fresh air, mountains and a little bit of luxury.</small></button><button class="choice" onclick="finish('SPA, but not in the mountains','🧖‍♀️ ✨')"><strong>SPA, but not in the mountains</strong><small>Maximum relaxation, minimum hiking.</small></button><button class="choice" onclick="finish('Sleep at my house + activities','🏠 ❤️')"><strong>Sleep at my house + activities</strong><small>Home base, adventures included.</small></button><button class="choice" onclick="finish('I just want to sleep with you ;))','🛏️ ❤️‍🔥')"><strong>I don't care. I just want to sleep with you ;))</strong><small>Honestly... fair enough.</small></button></div></div><button class="back" onclick="days()">← Back</button>`,3)}
+function weekend(){render(`<div><div class="eyebrow">The weekend</div><h2 class="title">What are we doing on Saturday?</h2><p class="subtitle">You only have 1.5 days. Make them count.</p><div class="actions"><button class="choice" onclick="finish('SPA','🧖‍♀️')"><strong>SPA</strong><small>A slow Saturday, as it should be.</small></button><button class="choice" onclick="finish('Visit to the Poli distillery','🥃')"><strong>Visit to the Poli distillery</strong><small>Discover where grappa is made.</small></button><button class="choice" onclick="finish('Horseback riding','🐴')"><strong>Horseback riding</strong><small>A little adventure on four legs.</small></button></div></div><button class="back" onclick="days()">← Back</button>`,3)}
+function finish(activity,emoji){state.activity=activity;render(`<div class="result"><div class="heart">${emoji}</div><div class="eyebrow">Your anniversary plan</div><h2 class="title">It's a date.</h2><div class="summary"><strong>${state.days} days in Italy</strong><br>${activity}<br><br>See you soon. ❤️</div><button class="restart" onclick="home()">Choose again</button></div>`,4)}
+home();
+</script>
+</body></html>
