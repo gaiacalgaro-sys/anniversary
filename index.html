@@ -28,7 +28,21 @@ function days(){render(`<div><div class="eyebrow">Chapter one</div><h2 class="ti
 function pickDays(v){state.days=v;v==='3'?three():weekend()}
 function three(){render(`<div><div class="eyebrow">Three days</div><h2 class="title">Choose your adventure.</h2><p class="subtitle">You have the luxury of time. So... what do you want?</p><div class="actions"><button class="choice" onclick="finish('Weekend in the mountains + SPA','🏔️ 🧖‍♀️')"><strong>Weekend in the mountains + SPA</strong><small>Fresh air, mountains and a little bit of luxury.</small></button><button class="choice" onclick="finish('SPA, but not in the mountains','🧖‍♀️ ✨')"><strong>SPA, but not in the mountains</strong><small>Maximum relaxation, minimum hiking.</small></button><button class="choice" onclick="finish('Sleep at my house + activities','🏠 ❤️')"><strong>Sleep at my house + activities</strong><small>Home base, adventures included.</small></button><button class="choice" onclick="finish('I just want to sleep with you ;))','🛏️ ❤️‍🔥')"><strong>I don't care. I just want to sleep with you ;))</strong><small>Honestly... fair enough.</small></button></div></div><button class="back" onclick="days()">← Back</button>`,3)}
 function weekend(){render(`<div><div class="eyebrow">The weekend</div><h2 class="title">What are we doing on Saturday?</h2><p class="subtitle">You only have 1.5 days. Make them count.</p><div class="actions"><button class="choice" onclick="finish('SPA','🧖‍♀️')"><strong>SPA</strong><small>A slow Saturday, as it should be.</small></button><button class="choice" onclick="finish('Visit to the Poli distillery','🥃')"><strong>Visit to the Poli distillery</strong><small>Discover where grappa is made.</small></button><button class="choice" onclick="finish('Horseback riding','🐴')"><strong>Horseback riding</strong><small>A little adventure on four legs.</small></button></div></div><button class="back" onclick="days()">← Back</button>`,3)}
-function finish(activity,emoji){state.activity=activity;render(`<div class="result"><div class="heart">${emoji}</div><div class="eyebrow">Your anniversary plan</div><h2 class="title">It's a date.</h2><div class="summary"><strong>${state.days} days in Italy</strong><br>${activity}<br><br>See you soon. ❤️</div><button class="restart" onclick="home()">Choose again</button></div>`,4)}
+async function finish(activity,emoji){
+  state.activity=activity;
+  try{
+    await fetch('https://formspree.io/f/xeaegevo',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body:JSON.stringify({
+        subject:"Léo's anniversary choice ❤️",
+        days:state.days + ' days in Italy',
+        activity:activity
+      })
+    });
+  }catch(e){console.error('Could not send choice',e)}
+  render(`<div class="result"><div class="heart">${emoji}</div><div class="eyebrow">Your anniversary plan</div><h2 class="title">It's a date.</h2><div class="summary"><strong>${state.days} days in Italy</strong><br>${activity}<br><br>See you soon. ❤️</div><button class="restart" onclick="home()">Choose again</button></div>`,4)
+}
 home();
 </script>
 </body></html>
